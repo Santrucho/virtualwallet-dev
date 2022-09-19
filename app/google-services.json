@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "397834495158",
+    "project_id": "virtualwallet-dev",
+    "storage_bucket": "virtualwallet-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397834495158:android:45c2c299c4b10cf7277217",
+        "android_client_info": {
+          "package_name": "com.santrucho.virtualwalletdev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397834495158-lcpqoe0jtkide1kr5jnv3m6dvr8hlva4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjuyQrzJVF-xG_WqcD3Spq3rsZcrh4QFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397834495158-lcpqoe0jtkide1kr5jnv3m6dvr8hlva4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
