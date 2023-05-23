@@ -1,7 +1,6 @@
-package com.santrucho.virtualwalletdev.model
+package com.santrucho.virtualwalletdev.data.model
 
-class Card(
-    val id : String= "",
+data class Card(
     val name : String = "",
     val number : String = "",
     val code : String = "",

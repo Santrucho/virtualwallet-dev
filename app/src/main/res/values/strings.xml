@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">VirtualWalletDev</string>
+
+    <string name="user_welcome">welcome</string>
+    <string name="username">Username</string>
+    <string name="balance_tv">Saldo disponible</string>
+    <string name="balance">485.54$</string>
+    <string name="send_money">Transferir</string>
+    <string name="deposit">Depositar</string>
+    <string name="add_card">Agregar tarjeta</string>
+
+    <string name="menu_home">Inicio</string>
+    <string name="menu_notifications">Notificaciones</string>
+    <string name="menu_activity">Actividad</string>
+    <string name="menu_more">Mas</string>
 </resources>
