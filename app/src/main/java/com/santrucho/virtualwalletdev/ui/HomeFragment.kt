@@ -2,13 +2,19 @@ package com.santrucho.virtualwalletdev.ui
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.santrucho.virtualwalletdev.R
 import com.santrucho.virtualwalletdev.data.model.Card
 import com.santrucho.virtualwalletdev.databinding.FragmentHomeBinding
 import com.santrucho.virtualwalletdev.utils.CardAdapter
+
 
 class HomeFragment : Fragment() {
     /*
@@ -19,8 +25,11 @@ class HomeFragment : Fragment() {
             CardViewModel::class.java
         )
     } */
+
     private  var _binding : FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+
     private lateinit var adapter : CardAdapter
     private lateinit var cardList : ArrayList<Card>
 
@@ -31,6 +40,7 @@ class HomeFragment : Fragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -39,6 +49,10 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         //getListOfCards()
+        binding.addCardButton.setOnClickListener{
+            val action = HomeFragmentDirections.actionHomeFragmentToNewCardFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun initUI(){
@@ -85,10 +99,6 @@ class HomeFragment : Fragment() {
         builder.show()
     } */
 
-    private fun onCreateCard(){
-        val action = HomeFragmentDirections.actionHomeFragmentToNewCardFragment()
-        findNavController().navigate(action)
-    }
 
 }
 

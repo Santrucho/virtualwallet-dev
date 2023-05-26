@@ -1,64 +1,74 @@
 package com.santrucho.virtualwalletdev
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.santrucho.virtualwalletdev.databinding.ActivityMainBinding
 import com.santrucho.virtualwalletdev.ui.HomeFragment
 import com.santrucho.virtualwalletdev.ui.MoreOptionFragment
 import com.santrucho.virtualwalletdev.ui.MovementFragment
 import com.santrucho.virtualwalletdev.ui.NotificationFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
-    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
-        navController = NavHostController(this)
-
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            handleBottomNavigation(it.itemId)
-        }
         setContentView(binding.root)
+
+
+        val bottomNavigationView = binding.bottomNavigationView
+        val navController = findNavController(R.id.fragment)
+
+        bottomNavigationView.setupWithNavController(navController)
+
     }
 
-    private fun handleBottomNavigation(
-        menuItemId: Int
-    ): Boolean = when (menuItemId) {
-        R.id.menu_home -> {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_container, HomeFragment())
-                .commit()
+    override fun onResume() {
+        super.onResume()
+        binding.bottomNavigationView.visibility = View.VISIBLE
+    }
+    /*
+    private fun initFragment(){
+        val homeFragment = HomeFragment()
+        val movementFragment = MovementFragment()
+        val notificationFragment = NotificationFragment()
+        val moreOptionFragment = MoreOptionFragment()
+
+        setCurrentFragment(homeFragment)
+
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            when(item.itemId){
+                R.id.menu_home -> setCurrentFragment(homeFragment)
+                R.id.menu_activity -> setCurrentFragment(movementFragment)
+                R.id.menu_notifications -> setCurrentFragment(notificationFragment)
+                R.id.menu_more -> setCurrentFragment(moreOptionFragment)
+            }
             true
         }
-        R.id.menu_activity -> {
-            swapFragments(MovementFragment())
-            true
-        }
-        R.id.menu_notifications -> {
-            swapFragments(NotificationFragment())
-            true
-        }
-        R.id.menu_more -> {
-            swapFragments(MoreOptionFragment())
-            true
-        }
-        else -> false
     }
 
-    private fun swapFragments(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_container, fragment)
-            .commit()
-    }
+
+    private fun setCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.nav_host_fragment, fragment)
+            addToBackStack(null)
+            commit()
+        } */
 
 }

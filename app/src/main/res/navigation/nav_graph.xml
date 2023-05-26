@@ -15,10 +15,25 @@
             app:destination="@id/newCardFragment" />
     </fragment>
     <fragment
+        android:id="@+id/movementFragment"
+        android:name="com.santrucho.virtualwalletdev.ui.MovementFragment"
+        android:label="MovementFragment"
+        tools:layout="@layout/fragment_movement"/>
+
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.santrucho.virtualwalletdev.ui.NotificationFragment"
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification"/>
+    <fragment
+        android:id="@+id/moreOptionFragment"
+        android:name="com.santrucho.virtualwalletdev.ui.MoreOptionFragment"
+        android:label="MoreOptionFragment"
+        tools:layout="@layout/fragment_more_option"/>
+    <fragment
         android:id="@+id/newCardFragment"
         android:name="com.santrucho.virtualwalletdev.ui.newcard.NewCardFragment"
-        android:label="NewCardFragment"
-        tools:layout="@layout/fragment_new_card">
+        android:label="NewCardFragment" >
         <action
             android:id="@+id/action_newCardFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
