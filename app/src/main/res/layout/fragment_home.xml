@@ -100,12 +100,13 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <Button
+                <ImageButton
                     android:id="@+id/send_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button"
-                    tools:ignore="ButtonStyle" />
+                    android:src="@drawable/ic_send"
+                    android:contentDescription="add icon" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -126,12 +127,13 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <Button
+                <ImageButton
                     android:id="@+id/deposit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button"
-                    tools:ignore="ButtonStyle" />
+                    android:src="@drawable/ic_attach_money"
+                    android:contentDescription="add icon"  />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -152,12 +154,13 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <Button
+                <ImageButton
                     android:id="@+id/addCard_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button"
-                    tools:ignore="ButtonStyle" />
+                    android:src="@drawable/ic_add_card"
+                    android:contentDescription="add icon" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -176,23 +179,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="Mis tarjetas"
         android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="56dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/myCards_tv" />
+        app:layout_constraintTop_toBottomOf="@id/myCards_tv"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/noCardsMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="No hay tarjetas registradas"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"/>
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

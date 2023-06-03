@@ -1,11 +1,13 @@
 package com.santrucho.virtualwalletdev.data.model
 
+import android.graphics.drawable.Drawable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.santrucho.virtualwalletdev.utils.Constants.WALLET_TABLE
+import com.santrucho.virtualwalletdev.utils.Constants.CARDS_TABLE
 
-@Entity (tableName = WALLET_TABLE)
+
+@Entity (tableName = CARDS_TABLE)
 data class Card(
     @PrimaryKey
     val uid : String = "",
@@ -16,6 +18,7 @@ data class Card(
     @ColumnInfo(name = "card_code")
     val code : String = "",
     @ColumnInfo(name = "card_expiration")
-    val expiration : String = ""
+    val expiration : String = "",
+    val type : Int = 0
 ) {
 }

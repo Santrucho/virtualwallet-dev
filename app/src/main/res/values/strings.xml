@@ -13,4 +13,13 @@
     <string name="menu_notifications">Notificaciones</string>
     <string name="menu_activity">Actividad</string>
     <string name="menu_more">Mas</string>
+
+    <string name="card_number">Numero de tarjeta</string>
+    <string name="card_name">Nombre del propietario de la tarjeta</string>
+    <string name="card_expiration">Fecha de vencimiento</string>
+    <string name="card_code">Codigo del dorso de la tarjeta</string>
+    
+    <string name="operation">Operacion</string>
+    <string name="uid">id de operacion</string>
+    <string name="date">fecha de operacion</string>
 </resources>

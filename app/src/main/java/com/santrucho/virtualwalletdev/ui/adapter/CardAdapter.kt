@@ -37,9 +37,10 @@ class CardViewHolder(view:View) : RecyclerView.ViewHolder(view){
     private val binding = ItemCardBinding.bind(view)
 
     fun bind(card: Card){
-        binding.nameCard.text = card.name
         binding.numberCard.text = card.number
+        binding.nameCard.text = card.name
         binding.expirationCard.text = card.expiration
         binding.codeCard.text = card.code
+        binding.cardLayout.setBackgroundResource(card.type)
     }
 }

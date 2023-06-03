@@ -1,7 +1,7 @@
-package com.santrucho.virtualwalletdev.domain
+package com.santrucho.virtualwalletdev.domain.card
 
 import com.santrucho.virtualwalletdev.data.model.Card
-import com.santrucho.virtualwalletdev.repository.CardRepository
+import com.santrucho.virtualwalletdev.repository.card.CardRepository
 import com.santrucho.virtualwalletdev.utils.Resource
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.santrucho.virtualwalletdev.repository
+package com.santrucho.virtualwalletdev.repository.card
 
 import com.santrucho.virtualwalletdev.data.local.CardDao
 import com.santrucho.virtualwalletdev.data.model.Card
@@ -21,8 +21,14 @@ class DefaultCardRepository @Inject constructor(private val cardDao: CardDao) : 
         }
     }
 
-    override suspend fun getCards(): List<Card> {
-        TODO("Not yet implemented")
+    override suspend fun getCards(): Resource<List<Card>> {
+        return withContext(Dispatchers.IO){
+            try{
+                Resource.Success(cardDao.getAllCard())
+            } catch (e:Exception){
+                Resource.Failure(e)
+            }
+        }
     }
 
     override suspend fun deleteCard(card: Card) {

@@ -1,37 +1,34 @@
 package com.santrucho.virtualwalletdev.ui
 
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.santrucho.virtualwalletdev.R
 import com.santrucho.virtualwalletdev.data.model.Card
 import com.santrucho.virtualwalletdev.databinding.FragmentHomeBinding
+import com.santrucho.virtualwalletdev.presentation.CardViewModel
 import com.santrucho.virtualwalletdev.utils.CardAdapter
+import com.santrucho.virtualwalletdev.utils.Resource
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
-    /*
-    private val viewModel by lazy {
-        ViewModelProviders.of(
-            this, CardViewModelFactory(CardUseCaseImpl(FirestoreRepoImpl()))
-        ).get(
-            CardViewModel::class.java
-        )
-    } */
 
-    private  var _binding : FragmentHomeBinding? = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: CardViewModel by viewModels()
 
-    private lateinit var adapter : CardAdapter
-    private lateinit var cardList : ArrayList<Card>
+    private lateinit var adapter: CardAdapter
+    private lateinit var cardList: ArrayList<Card>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,23 +36,21 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        setHasOptionsMenu(true)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
-        //getListOfCards()
-        binding.addCardButton.setOnClickListener{
+        binding.addCardButton.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToNewCardFragment()
             findNavController().navigate(action)
         }
     }
 
-    private fun initUI(){
+    private fun initUI() {
         cardList = ArrayList()
         adapter = CardAdapter(cardList)
 
@@ -63,26 +58,48 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = manager
         binding.recyclerView.hasFixedSize()
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.apply {
+            set3DItem(true)
+            setAlpha(true)
+        }
 
         adapter.notifyDataSetChanged()
 
+        getAllCards()
+
     }
-    /*
-    private fun getListOfCards(){
-        viewModel.fetchCardList.observe(viewLifecycleOwner,Observer{ result ->
-            when(result){
-                is Resource.Success -> {
-                    adapter.setCardList(result.data)
-                }
-                is Resource.Failure -> {
-                    Toast.makeText(requireContext(),"An error has ocurred:${result.exception.message}",Toast.LENGTH_SHORT).show()
-                }
-                else -> {
-                    Toast.makeText(requireContext(),"Another error",Toast.LENGTH_SHORT).show()
+
+    private fun getAllCards() {
+        lifecycleScope.launch {
+            viewModel.allCardsState.collect { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is Resource.Success -> {
+                        if (result.data != null) {
+                            binding.progressBar.visibility = View.GONE
+                            binding.noCardsMessage.visibility = View.GONE
+                            adapter.setCardList(result.data)
+                        } else{
+                            binding.noCardsMessage.visibility = View.VISIBLE
+                        }
+                    }
+                    is Resource.Failure -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(
+                            requireContext(),
+                            "An error has ocurred:${result.exception.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
+                        binding.noCardsMessage.visibility = View.VISIBLE
+                    }
                 }
             }
-        })
-    } */
+        }
+    }
 
     /*
     private fun deleteAllCards(listCard : MutableList<Card>){
