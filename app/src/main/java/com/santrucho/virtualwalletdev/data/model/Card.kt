@@ -19,6 +19,7 @@ data class Card(
     val code : String = "",
     @ColumnInfo(name = "card_expiration")
     val expiration : String = "",
-    val type : Int = 0
+    val type : Int = 0,
+    val owner : String = ""
 ) {
 }

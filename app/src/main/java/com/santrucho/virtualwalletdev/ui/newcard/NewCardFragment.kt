@@ -1,5 +1,6 @@
 package com.santrucho.virtualwalletdev.ui.newcard
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -37,6 +38,8 @@ class NewCardFragment() : Fragment() {
     private val viewModel:CardViewModel by viewModels()
     private val movementViewModel: MovementViewModel by viewModels()
 
+    private lateinit var owner : String
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +47,10 @@ class NewCardFragment() : Fragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentNewCardBinding.inflate(inflater,container,false)
+
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        owner = sharedPreferences.getString("username", "").toString()
+
         return binding.root
     }
 
@@ -95,14 +102,14 @@ class NewCardFragment() : Fragment() {
             val cardView = binding.cardView
             val background = updateCardBackground(number,cardView)
             val randomUID = UUID.randomUUID().toString()
-            val card = Card(uid = randomUID,name = name,number = number,expiration = expiration,code = code,type = background)
+            val card = Card(uid = randomUID,name = name,number = number,expiration = expiration,code = code,type = background,owner = owner)
             viewModel.addCard(card)
         }
     }
 
     private fun generateTransaction(){
         val randomId = (10000000..99999999).random().toString()
-        val movement = Movement(id = randomId,"Nueva tarjeta asociada",LocalDate.now().toString())
+        val movement = Movement(id = randomId,"Nueva tarjeta asociada",LocalDate.now().toString(),owner=owner)
         movementViewModel.generateMovement(movement)
     }
 

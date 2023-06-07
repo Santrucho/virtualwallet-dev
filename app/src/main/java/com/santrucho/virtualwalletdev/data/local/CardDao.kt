@@ -8,14 +8,14 @@ import com.santrucho.virtualwalletdev.utils.Constants.CARDS_TABLE
 interface CardDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addCard(product: Card) : Long
+    suspend fun addCard(card: Card) : Long
 
     @Delete
-    fun deleteCard(product:Card)
+    fun deleteCard(card:Card)
 
-    @Query("SELECT * FROM $CARDS_TABLE ORDER BY uid ASC")
-    suspend fun getAllCard() : List<Card>
+    @Query("SELECT * FROM $CARDS_TABLE WHERE owner = :owner ORDER BY uid ASC")
+    suspend fun getAllCard(owner:String) : List<Card>
 
-    @Query("SELECT * FROM $CARDS_TABLE WHERE uid = :productId")
-    suspend fun getCard(productId:Int) : Card
+    @Query("SELECT * FROM $CARDS_TABLE WHERE uid = :cardId")
+    suspend fun getCard(cardId:Int) : Card
 }

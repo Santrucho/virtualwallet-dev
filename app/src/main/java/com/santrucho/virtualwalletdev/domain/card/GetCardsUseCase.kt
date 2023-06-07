@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 class GetCardsUseCase @Inject constructor(private val cardRepository: CardRepository) {
 
-    suspend operator fun invoke() : Resource<List<Card>> {
+    suspend operator fun invoke(owner:String) : Resource<List<Card>> {
         return try{
-            cardRepository.getCards()
+            cardRepository.getCards(owner)
         } catch (e:Exception){
             Resource.Failure(e)
         }

@@ -1,6 +1,7 @@
 package com.santrucho.virtualwalletdev.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,6 +39,8 @@ class MovementFragment : Fragment() {
     private lateinit var allMovement : ArrayList<Movement>
     private lateinit var adapterForAll : MovementAdapter
 
+    private lateinit var owner:String
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,6 +48,10 @@ class MovementFragment : Fragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentMovementBinding.inflate(inflater,container,false)
+
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        owner = sharedPreferences.getString("username", "").toString()
+
         return binding.root
     }
 
@@ -54,6 +61,9 @@ class MovementFragment : Fragment() {
     }
 
     private fun initUI() {
+
+        viewModel.getAllMovement(owner)
+
         movementList = ArrayList()
         adapter = MovementAdapter(movementList)
 
@@ -70,7 +80,7 @@ class MovementFragment : Fragment() {
 
         getAllMovement()
 
-        viewModel.getAllMovement()
+
     }
 
     private fun setupRecyclerView(

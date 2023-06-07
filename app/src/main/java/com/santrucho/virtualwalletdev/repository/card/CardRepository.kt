@@ -7,7 +7,7 @@ interface CardRepository {
 
     suspend fun addCard(card: Card) : Resource<Card>
 
-    suspend fun getCards() : Resource<List<Card>>
+    suspend fun getCards(owner:String) : Resource<List<Card>>
 
     suspend fun deleteCard(card:Card)
 

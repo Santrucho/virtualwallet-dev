@@ -21,9 +21,6 @@ class MovementViewModel @Inject constructor(private val newMovementUseCase: NewM
     private val _allMovementState = MutableStateFlow<Resource<List<Movement>>?>(null)
     val allMovementState : StateFlow<Resource<List<Movement>>?> = _allMovementState
 
-    init {
-        getAllMovement()
-    }
 
     fun generateMovement(movement:Movement){
         viewModelScope.launch {
@@ -32,10 +29,10 @@ class MovementViewModel @Inject constructor(private val newMovementUseCase: NewM
         }
     }
 
-    fun getAllMovement(){
+    fun getAllMovement(owner:String){
         viewModelScope.launch {
             _allMovementState.value = Resource.Loading()
-            _allMovementState.value = allMovementUseCase()
+            _allMovementState.value = allMovementUseCase(owner)
         }
     }
 

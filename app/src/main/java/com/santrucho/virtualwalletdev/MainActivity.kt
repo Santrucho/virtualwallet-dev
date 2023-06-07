@@ -43,32 +43,4 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
-    /*
-    private fun initFragment(){
-        val homeFragment = HomeFragment()
-        val movementFragment = MovementFragment()
-        val notificationFragment = NotificationFragment()
-        val moreOptionFragment = MoreOptionFragment()
-
-        setCurrentFragment(homeFragment)
-
-        binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            when(item.itemId){
-                R.id.menu_home -> setCurrentFragment(homeFragment)
-                R.id.menu_activity -> setCurrentFragment(movementFragment)
-                R.id.menu_notifications -> setCurrentFragment(notificationFragment)
-                R.id.menu_more -> setCurrentFragment(moreOptionFragment)
-            }
-            true
-        }
-    }
-
-
-    private fun setCurrentFragment(fragment: Fragment) =
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.nav_host_fragment, fragment)
-            addToBackStack(null)
-            commit()
-        } */
-
 }

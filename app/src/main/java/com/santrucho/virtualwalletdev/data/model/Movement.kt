@@ -10,6 +10,7 @@ data class Movement(
     var id : String = "",
     var operation : String = "",
     var date : String = "",
-    var amount : Int = 0
+    var amount : Int = 0,
+    var owner : String = ""
 ){
 }

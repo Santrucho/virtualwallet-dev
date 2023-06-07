@@ -24,10 +24,6 @@ class CardViewModel @Inject constructor(
     private var _allCardsState = MutableStateFlow<Resource<List<Card>>?>(null)
     val allCardsState: StateFlow<Resource<List<Card>>?> = _allCardsState
 
-    init {
-        getAllCards()
-    }
-
     fun addCard(card: Card) {
         viewModelScope.launch {
             _cardState.value = Resource.Loading()
@@ -35,10 +31,10 @@ class CardViewModel @Inject constructor(
         }
     }
 
-    fun getAllCards() {
+    fun getAllCards(owner:String) {
         viewModelScope.launch {
             _allCardsState.value = Resource.Loading()
-            _allCardsState.value = getCardsUseCase()
+            _allCardsState.value = getCardsUseCase(owner)
         }
     }
 }

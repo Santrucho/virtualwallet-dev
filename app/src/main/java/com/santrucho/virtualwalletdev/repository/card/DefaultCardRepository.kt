@@ -21,10 +21,10 @@ class DefaultCardRepository @Inject constructor(private val cardDao: CardDao) : 
         }
     }
 
-    override suspend fun getCards(): Resource<List<Card>> {
+    override suspend fun getCards(owner:String): Resource<List<Card>> {
         return withContext(Dispatchers.IO){
             try{
-                Resource.Success(cardDao.getAllCard())
+                Resource.Success(cardDao.getAllCard(owner))
             } catch (e:Exception){
                 Resource.Failure(e)
             }

@@ -7,5 +7,5 @@ interface MovementRepository {
 
     suspend fun newMovement(movement: Movement) : Resource<Movement>
 
-    suspend fun getAllMovement() : Resource<List<Movement>>
+    suspend fun getAllMovement(owner:String) : Resource<List<Movement>>
 }

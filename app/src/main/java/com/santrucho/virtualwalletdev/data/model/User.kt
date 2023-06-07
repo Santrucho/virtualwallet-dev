@@ -9,6 +9,8 @@ data class User(
     @PrimaryKey
     val cbu : String = "",
     val username : String = "",
-    val balance : Int = 0
+    val email:String = "",
+    val password : String = "",
+    val balance : Long = 0L
 ) {
 }

@@ -20,10 +20,10 @@ class DefaultMovementRepository @Inject constructor(private val movementDao : Mo
         }
     }
 
-    override suspend fun getAllMovement(): Resource<List<Movement>> {
+    override suspend fun getAllMovement(owner:String): Resource<List<Movement>> {
         return withContext(Dispatchers.IO){
             try{
-                val result = movementDao.getAllMovement()
+                val result = movementDao.getAllMovement(owner)
                 Resource.Success(result)
             }catch (e:Exception){
                 Resource.Failure(e)

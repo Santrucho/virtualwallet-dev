@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 class GetAllMovementUseCase @Inject constructor(private val movementRepository: MovementRepository){
 
-    suspend operator fun invoke() : Resource<List<Movement>> {
+    suspend operator fun invoke(owner:String) : Resource<List<Movement>> {
         return try{
-            movementRepository.getAllMovement()
+            movementRepository.getAllMovement(owner)
         }catch (e:Exception){
             Resource.Failure(e)
         }

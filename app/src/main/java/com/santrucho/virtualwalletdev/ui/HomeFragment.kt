@@ -1,6 +1,8 @@
 package com.santrucho.virtualwalletdev.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.santrucho.virtualwalletdev.data.model.Card
 import com.santrucho.virtualwalletdev.databinding.FragmentHomeBinding
 import com.santrucho.virtualwalletdev.presentation.CardViewModel
+import com.santrucho.virtualwalletdev.presentation.UserViewModel
 import com.santrucho.virtualwalletdev.utils.CardAdapter
 import com.santrucho.virtualwalletdev.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,9 +29,12 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: CardViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var adapter: CardAdapter
     private lateinit var cardList: ArrayList<Card>
+
+    private lateinit var username : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,12 +44,19 @@ class HomeFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        username = sharedPreferences.getString("username", "").toString()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getAllCards(username)
+
         initUI()
+
         binding.addCardButton.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToNewCardFragment()
             findNavController().navigate(action)
@@ -51,6 +64,28 @@ class HomeFragment : Fragment() {
     }
 
     private fun initUI() {
+
+
+        userViewModel.getUserData(username)
+        lifecycleScope.launch {
+            userViewModel.userInfo.collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is Resource.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.username.text = resource.data?.username
+                        binding.balance.text = resource.data?.balance.toString()
+                    }
+                    is Resource.Failure -> {
+                        binding.progressBar.visibility = View.GONE
+                    }
+                    else -> {}
+                }
+            }
+        }
+
         cardList = ArrayList()
         adapter = CardAdapter(cardList)
 
@@ -75,18 +110,20 @@ class HomeFragment : Fragment() {
                 when (result) {
                     is Resource.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
+                        binding.noCardsMessage.visibility = View.GONE
                     }
                     is Resource.Success -> {
-                        if (result.data != null) {
+                        if (result.data.isNotEmpty()) {
                             binding.progressBar.visibility = View.GONE
                             binding.noCardsMessage.visibility = View.GONE
                             adapter.setCardList(result.data)
-                        } else{
+                        } else {
                             binding.noCardsMessage.visibility = View.VISIBLE
                         }
                     }
                     is Resource.Failure -> {
                         binding.progressBar.visibility = View.GONE
+                        binding.noCardsMessage.visibility = View.GONE
                         Toast.makeText(
                             requireContext(),
                             "An error has ocurred:${result.exception.message}",
@@ -100,22 +137,5 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-    /*
-    private fun deleteAllCards(listCard : MutableList<Card>){
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Delete All Cards")
-        builder.setMessage("You sure want delete all cards?")
-        builder.setPositiveButton("YES") { _, _ ->
-            viewModel.deleteAll(listCard)
-            Toast.makeText(context,"Cards remove with success",Toast.LENGTH_SHORT).show()
-        }
-        builder.setNegativeButton("NO"){ _ , _ ->
-            Toast.makeText(context,"Remove Cancelled",Toast.LENGTH_SHORT).show()
-        }
-        builder.show()
-    } */
-
-
 }
 

@@ -13,7 +13,7 @@ interface MovementDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMovement(movement: Movement) : Long
 
-    @Query("SELECT * FROM $MOVEMENTS_TABLE ORDER BY id ASC")
-    suspend fun getAllMovement() : List<Movement>
+    @Query("SELECT * FROM $MOVEMENTS_TABLE WHERE owner = :owner ORDER BY id ASC")
+    suspend fun getAllMovement(owner:String) : List<Movement>
 
 }
