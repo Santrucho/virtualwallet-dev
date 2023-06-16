@@ -18,6 +18,8 @@ class CardViewModel @Inject constructor(
     private val getCardsUseCase: GetCardsUseCase
 ) : ViewModel() {
 
+    val number = MutableStateFlow("")
+
     private var _cardState = MutableStateFlow<Resource<Card>?>(null)
     val cardState: StateFlow<Resource<Card>?> = _cardState
 

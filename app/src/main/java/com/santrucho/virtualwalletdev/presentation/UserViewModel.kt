@@ -1,11 +1,14 @@
 package com.santrucho.virtualwalletdev.presentation
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santrucho.virtualwalletdev.data.model.User
 import com.santrucho.virtualwalletdev.domain.*
 import com.santrucho.virtualwalletdev.utils.Resource
+import com.santrucho.virtualwalletdev.utils.formatMoney
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +21,8 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val createUserUseCase: CreateUserUseCase,
     private val loginUseCase: LoginUseCase,
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val transferUseCase: TransferUseCase
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow<Resource<User>?>(null)
@@ -29,6 +33,9 @@ class UserViewModel @Inject constructor(
 
     private val _userInfo = MutableStateFlow<Resource<User?>?>(null)
     val userInfo: StateFlow<Resource<User?>?> = _userInfo
+
+    private val _sendMoney = MutableStateFlow<Resource<Int>?>(null)
+    val sendMoney : StateFlow<Resource<Int>?> = _sendMoney
 
     fun createUser(user: User) {
         viewModelScope.launch {
@@ -56,6 +63,13 @@ class UserViewModel @Inject constructor(
             _userState.value = null
             _loginState.value = Resource.Loading()
             _loginState.value = null
+        }
+    }
+
+    fun transferMoney(addresseeCbu:String,senderCbu:String,amount:Int?){
+        viewModelScope.launch {
+            _sendMoney.value = Resource.Loading()
+            _sendMoney.value = transferUseCase(addresseeCbu,senderCbu,amount)
         }
     }
 }

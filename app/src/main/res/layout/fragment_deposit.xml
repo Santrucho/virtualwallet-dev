@@ -4,52 +4,64 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <LinearLayout
+        android:id="@+id/cards_ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <TextView
-        android:id="@+id/addressed_tv"
+        android:id="@+id/cards_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="A quien deseas transferirle?"
+        android:text="Seleccionar tarjeta"
         android:textSize="24sp"
-        android:layout_margin="16dp"
         android:textColor="@color/black"
+        android:layout_margin="16sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/cbu_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        style="@style/OutlinedTextInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/addressed_tv"
-        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/noCardsMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="No hay tarjetas registradas"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:visibility="gone" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cbu_field"
+        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="cbu del destinatario"
-            style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/deposit_ll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbu_layout">
+        app:layout_constraintTop_toBottomOf="@id/cards_ll">
 
-        <TextView
-            android:id="@+id/deposit_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cuanto deseas transferir?"
-            android:textSize="22sp"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/cards_ll"
-            app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:id="@+id/deposit_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cuanto quieres ingresar?"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/cards_ll"
+        app:layout_constraintStart_toStartOf="parent"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/amount_layout"
@@ -69,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:hint="0.00"
-                android:textSize="60sp"
+                android:textSize="80sp"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,19 +95,17 @@
         android:text="Confirmar operacion"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/deposit_ll"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/back_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Volver atras"
+        android:text="Volver a inicio"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/confirm_operation_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -106,5 +116,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

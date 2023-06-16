@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_homeFragment_to_newCardFragment"
             app:destination="@id/newCardFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_depositFragment"
+            app:destination="@id/depositFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_transferFragment"
+            app:destination="@id/transferFragment" />
     </fragment>
     <fragment
         android:id="@+id/movementFragment"
@@ -36,6 +42,22 @@
         android:label="NewCardFragment" >
         <action
             android:id="@+id/action_newCardFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/depositFragment"
+        android:name="com.santrucho.virtualwalletdev.ui.DepositFragment"
+        android:label="DepositFragment" >
+        <action
+            android:id="@+id/action_depositFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/transferFragment"
+        android:name="com.santrucho.virtualwalletdev.ui.TransferFragment"
+        android:label="TransferFragment" >
+        <action
+            android:id="@+id/action_transferFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 

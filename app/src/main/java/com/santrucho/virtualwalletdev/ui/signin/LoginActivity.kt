@@ -46,6 +46,10 @@ class LoginActivity : AppCompatActivity() {
                     is Resource.Success -> {
                         binding.progressBar.visibility = View.GONE
                         Toast.makeText(this@LoginActivity, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show()
+
+                        val userCbu = resource.data?.cbu
+                        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("ownerCbu", userCbu).apply()
                         navigateToHome()
                     }
                     else -> {

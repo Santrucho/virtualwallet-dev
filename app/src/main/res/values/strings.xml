@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">VirtualWalletDev</string>
 
-    <string name="user_welcome">welcome</string>
+    <string name="user_welcome">Bienvenid@!</string>
     <string name="username">Username</string>
     <string name="balance_tv">Saldo disponible</string>
     <string name="balance">485.54$</string>

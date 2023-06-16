@@ -11,4 +11,6 @@ interface UserRepository {
 
     suspend fun getUserData(username:String) : Resource<User?>
 
+    suspend fun transferMoney(addresseeCbu: String, senderCbu:String, amount:Int?) : Resource<Int>
+
 }

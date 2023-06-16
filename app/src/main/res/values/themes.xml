@@ -20,4 +20,9 @@
         <item name="boxStrokeColor">@android:color/black</item>
     </style>
 
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@android:color/white</item>
+        <item name="boxBackgroundMode">filled</item>
+    </style>
+
 </resources>

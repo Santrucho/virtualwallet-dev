@@ -25,6 +25,7 @@ import com.santrucho.virtualwalletdev.databinding.FragmentNewCardBinding
 import com.santrucho.virtualwalletdev.presentation.CardViewModel
 import com.santrucho.virtualwalletdev.presentation.MovementViewModel
 import com.santrucho.virtualwalletdev.utils.Resource
+import com.santrucho.virtualwalletdev.utils.formatCardNumber
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -64,6 +65,38 @@ class NewCardFragment() : Fragment() {
         setupFieldChangeListener(binding.codeField,binding.codeInCard)
         setupFieldChangeListener(binding.expirationField,binding.dateInCard)
 
+        var cardNumber = viewModel.number
+
+        // Configurar el listener del campo de número de tarjeta
+        binding.numberField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // No se necesita implementar
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Actualizar el valor del MutableStateFlow
+                cardNumber.value = s.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // No se necesita implementar
+            }
+        })
+
+        // Observar los cambios en el MutableStateFlow
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            cardNumber.collect { cardNumber ->
+                // Aplicar el formato al número de tarjeta
+                val formattedCardNumber = formatCardNumber(cardNumber)
+
+                // Actualizar el campo de número de tarjeta con el valor formateado
+                binding.numberField.setText(formattedCardNumber)
+
+                // Ajustar la posición del cursor al final
+                binding.numberField.setSelection(formattedCardNumber.length)
+            }
+        }
+
         lifecycleScope.launch {
             viewModel.cardState.collect { resource ->
                 when (resource) {
@@ -74,6 +107,7 @@ class NewCardFragment() : Fragment() {
                         // Acciones a realizar cuando se obtiene un resultado exitoso
                         binding.progressBar.visibility = View.GONE
                         Toast.makeText(requireContext(),"Tarjeta anadida correctamente",Toast.LENGTH_SHORT).show()
+                        generateTransaction()
                         onHomeFragment()
                     }
                     is Resource.Failure -> {
@@ -90,8 +124,7 @@ class NewCardFragment() : Fragment() {
         }
 
         binding.createCard.setOnClickListener {
-            createCard(binding.nameField.text.toString(),binding.numberField.text.toString(),binding.expirationField.text.toString(),binding.codeField.text.toString())
-            generateTransaction()
+            createCard(cardNumber.value,binding.numberField.text.toString(),binding.expirationField.text.toString(),binding.codeField.text.toString())
         }
     }
 
@@ -123,8 +156,6 @@ class NewCardFragment() : Fragment() {
         findNavController().navigate(action)
     }
 
-
-
     private fun setupFieldChangeListener(
         field: TextInputEditText,
         textView: TextView,
@@ -136,7 +167,6 @@ class NewCardFragment() : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 textView.text = s
-
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -155,9 +185,9 @@ class NewCardFragment() : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                textView.text = s
-                updateCardBackground(s?.toString(),cardView)
-
+                val formattedNumber = formatCardNumber(s.toString())
+                textView.text = formattedNumber// Volver a agregar el TextWatcher
+                updateCardBackground(s?.toString(), cardView)
             }
 
             override fun afterTextChanged(s: Editable?) {

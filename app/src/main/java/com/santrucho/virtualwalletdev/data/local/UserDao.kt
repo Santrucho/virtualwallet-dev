@@ -18,8 +18,14 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createUser(user: User) : Long
 
-    @Query("UPDATE USER_TABLE SET balance = balance - :amount WHERE cbu = :cbu")
-    suspend fun sendMoney(cbu:Int,amount:Int)
+    @Query("SELECT * FROM USER_TABLE WHERE cbu = :cbu")
+    suspend fun getUserByCbu(cbu: String): User?
+
+    @Query("UPDATE USER_TABLE SET balance = balance - :amount WHERE cbu = :senderCbu")
+    suspend fun decreaseBalance(senderCbu: String, amount: Int) : Int
+
+    @Query("UPDATE USER_TABLE SET balance = balance + :amount WHERE cbu = :addresseeCbu")
+    suspend fun increaseBalance(addresseeCbu: String, amount: Int) : Int
 
     @Query("UPDATE USER_TABLE SET balance = balance + :amount WHERE cbu = :cbu")
     suspend fun depositMoney(cbu:Int,amount:Int)

@@ -2,7 +2,6 @@ package com.santrucho.virtualwalletdev.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,31 +11,30 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.santrucho.virtualwalletdev.R
 import com.santrucho.virtualwalletdev.data.model.Card
-import com.santrucho.virtualwalletdev.databinding.FragmentHomeBinding
+import com.santrucho.virtualwalletdev.databinding.FragmentDepositBinding
 import com.santrucho.virtualwalletdev.presentation.CardViewModel
 import com.santrucho.virtualwalletdev.presentation.UserViewModel
 import com.santrucho.virtualwalletdev.utils.CardAdapter
 import com.santrucho.virtualwalletdev.utils.Resource
-import com.santrucho.virtualwalletdev.utils.formatMoney
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class DepositFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentDepositBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: CardViewModel by viewModels()
-    private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var adapter: CardAdapter
     private lateinit var cardList: ArrayList<Card>
 
-    private lateinit var username : String
-    private lateinit var ownerCbu : String
+    private lateinit var owner: String
+
+    private val viewModel: UserViewModel by viewModels()
+    private val cardViewModel: CardViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,56 +42,34 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentDepositBinding.inflate(inflater, container, false)
 
-        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        username = sharedPreferences.getString("username", "").toString()
-
-        ownerCbu = sharedPreferences.getString("ownerCbu", "").toString()
+        val sharedPreferences =
+            requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        owner = sharedPreferences.getString("username", "").toString()
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility =
+            View.GONE
 
-        viewModel.getAllCards(username)
+        initRecyclerView()
 
-        initUI()
-
-        binding.sendButton.setOnClickListener{
-            navigateToTransfer()
+        binding.confirmOperationBtn.setOnClickListener {
+            depositMoney()
+        }
+        binding.backBtn.setOnClickListener {
+            navigateToHome()
         }
 
-        binding.addCardButton.setOnClickListener {
-            navigateToNewCard()
-        }
-        binding.depositButton.setOnClickListener{
-            navigateToDeposit()
-        }
     }
 
-    private fun initUI() {
+    private fun initRecyclerView() {
 
-        userViewModel.getUserData(username)
-        lifecycleScope.launch {
-            userViewModel.userInfo.collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is Resource.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.username.text = resource.data?.username
-                        binding.balance.text = formatMoney(resource.data?.balance.toString())
-                    }
-                    is Resource.Failure -> {
-                        binding.progressBar.visibility = View.GONE
-                    }
-                    else -> {}
-                }
-            }
-        }
+        cardViewModel.getAllCards(owner)
 
         cardList = ArrayList()
         adapter = CardAdapter(cardList)
@@ -109,17 +85,11 @@ class HomeFragment : Fragment() {
 
         adapter.notifyDataSetChanged()
 
-        getAllCards()
-
-    }
-
-    private fun getAllCards() {
         lifecycleScope.launch {
-            viewModel.allCardsState.collect { result ->
+            cardViewModel.allCardsState.collect { result ->
                 when (result) {
                     is Resource.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
-                        binding.noCardsMessage.visibility = View.GONE
                     }
                     is Resource.Success -> {
                         if (result.data.isNotEmpty()) {
@@ -132,7 +102,6 @@ class HomeFragment : Fragment() {
                     }
                     is Resource.Failure -> {
                         binding.progressBar.visibility = View.GONE
-                        binding.noCardsMessage.visibility = View.GONE
                         Toast.makeText(
                             requireContext(),
                             "An error has ocurred:${result.exception.message}",
@@ -145,19 +114,21 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
     }
 
-    private fun navigateToNewCard(){
-        val action = HomeFragmentDirections.actionHomeFragmentToNewCardFragment()
+    private fun depositMoney() {
+
+    }
+
+    private fun navigateToHome() {
+        val action = DepositFragmentDirections.actionDepositFragmentToHomeFragment()
         findNavController().navigate(action)
     }
-    private fun navigateToDeposit(){
-        val action = HomeFragmentDirections.actionHomeFragmentToDepositFragment()
-        findNavController().navigate(action)
-    }
-    private fun navigateToTransfer(){
-        val action = HomeFragmentDirections.actionHomeFragmentToTransferFragment()
-        findNavController().navigate(action)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility =
+            View.VISIBLE
     }
 }
-
